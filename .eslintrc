@@ -1,7 +1,7 @@
 {
   "root": true,
-  "parser": "@typescript-eslint/parser ",
-  "plugins": ["react-hooks", "@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react-hooks", "@typescript-eslint", "testing-library"],
   "extends": [
     "react-app",
     "eslint:recommended",
