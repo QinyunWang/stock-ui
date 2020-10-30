@@ -1,10 +1,10 @@
-import { Action, LOGIN_SUCCESS, LOGOUT } from './types'
+import { CustomizedAction, LOGIN_SUCCESS, LOGOUT } from './types'
 
-const loginSuccessAction = (): Action<undefined> => ({
+const loginSuccessAction = (): CustomizedAction<undefined> => ({
   type: LOGIN_SUCCESS,
 })
 
-const logoutAction = (): Action<undefined> => ({
+const logoutAction = (): CustomizedAction<undefined> => ({
   type: LOGOUT,
 })
 

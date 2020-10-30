@@ -1,7 +1,8 @@
+import { Action } from 'redux'
+
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGOUT = 'LOGOUT'
 
-export interface Action<T> {
-  type: string
+export interface CustomizedAction<T> extends Action<string> {
   payload?: T
 }

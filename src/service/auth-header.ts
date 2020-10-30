@@ -1,15 +1,19 @@
+import { pipe } from 'fp-ts/lib/function'
+import * as O from 'fp-ts/lib/Option'
+
 interface AuthHeader {
   Authorization?: string
 }
 
-const authHeader = (): AuthHeader => {
-  const user = JSON.parse(localStorage.getItem('user'))
-
-  if (user?.accessToken) {
-    return { Authorization: 'Bearer ' + user.accessToken }
-  } else {
-    return {}
-  }
-}
+const authHeader = (): AuthHeader =>
+  pipe(
+    localStorage.getItem('user'),
+    O.fromNullable,
+    O.map((user) => JSON.parse(user).accessToken),
+    O.fold(
+      () => ({}),
+      (accessToken) => ({ Authorization: 'Bearer ' + accessToken })
+    )
+  )
 
 export default authHeader
