@@ -1,7 +1,8 @@
 import { CustomizedAction, LOGIN_SUCCESS, LOGOUT } from './types'
 
-const loginSuccessAction = (): CustomizedAction<undefined> => ({
+const loginSuccessAction = (username: string): CustomizedAction<string> => ({
   type: LOGIN_SUCCESS,
+  payload: username,
 })
 
 const logoutAction = (): CustomizedAction<undefined> => ({

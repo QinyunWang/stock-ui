@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:8080/api/auth'
+const API_URL = 'http://localhost:8080/api/auth/'
 
 interface JwtResponse {
   id: number
@@ -24,10 +24,18 @@ const register = (username: string, email: string, password: string): Promise<Me
 
 const login = async (username: string, password: string): Promise<JwtResponse> => {
   return axios
-    .post(API_URL + 'signin', {
-      username,
-      password,
-    })
+    .post(
+      API_URL + 'signin',
+      {
+        username,
+        password,
+      },
+      {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    )
     .then((response) => {
       response.data.accessToken && localStorage.setItem('user', JSON.stringify(response.data))
       return response.data

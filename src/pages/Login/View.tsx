@@ -1,39 +1,53 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { loginSuccessAction } from '../../actions/auth'
 import { AppState } from '../../types/AppStateContext'
 import { ContentContainer, InputBox, LeftImageSection, RightLoginSection } from './styles'
 import { Button, Form, Typography } from 'antd'
+import { useFormik } from 'formik'
+import { login } from '../../service/auth.service'
 
 interface Props {
   isLoggedIn: boolean
-  onClick: () => void
+  dispatchLoginSuccessAction: (username: string) => void
+}
+
+interface SignInValues {
+  username: string
+  password: string
 }
 
 const Login = (props: Props) => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  // const [loading, setLoadding] = useState(false)
-
   //TODO: Use formik and yup to validate form
   //TODO: dispatch action for true login result
 
-  const onSubmit = (values) => {
-    console.log(values, username, password)
-  }
+  const { handleSubmit, handleChange } = useFormik<SignInValues>({
+    initialValues: {
+      username: '',
+      password: '',
+    },
+    onSubmit: async (values) => {
+      try {
+        const response = await login(values.username, values.password)
+        props.dispatchLoginSuccessAction(response.username)
+      } catch {
+        console.log('Failed')
+      }
+    },
+  })
 
   return (
     <ContentContainer>
       <LeftImageSection />
       <RightLoginSection>
         <Typography.Title level={2}>Welcome to EmpireStock</Typography.Title>
-        <Form layout='vertical' onFinish={onSubmit}>
+        <Form layout='vertical' onFinish={handleSubmit}>
           <Form.Item label='Username' name='username'>
-            <InputBox onChange={(e) => setUsername(e.target.value)} />
+            <InputBox onChange={handleChange} />
           </Form.Item>
           <Form.Item label='Password' name='password'>
-            <InputBox type='password' onChange={(e) => setPassword(e.target.value)} />
+            <InputBox type='password' onChange={handleChange} />
           </Form.Item>
           <Form.Item>
             <Button type='primary' htmlType='submit' size='middle'>
@@ -51,7 +65,7 @@ const mapStateToProps = (state: AppState) => ({
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  onClick: () => dispatch(loginSuccessAction()),
+  dispatchLoginSuccessAction: (username: string) => dispatch(loginSuccessAction(username)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)
