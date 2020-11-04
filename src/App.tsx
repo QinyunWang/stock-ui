@@ -1,9 +1,7 @@
 import React, { FC } from 'react'
 import 'antd/dist/antd.css'
-import Login from './pages/Login'
+import Router from './routes'
 
-const App: FC = () => {
-  return <Login />
-}
+const App: FC = () => <Router />
 
 export default App
