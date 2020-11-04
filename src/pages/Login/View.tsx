@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { loginSuccessAction } from '../../actions/auth'
 import { AppState } from '../../types/AppStateContext'
 import { ContentContainer, InputBox, LeftImageSection, RightLoginSection } from './styles'
-import { Button, Form, Typography } from 'antd'
+import { Alert, Button, Form, Typography } from 'antd'
 import { useFormik } from 'formik'
 import { login } from '../../service/auth.service'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
   isLoggedIn: boolean
@@ -19,8 +20,10 @@ interface SignInValues {
 }
 
 const Login = (props: Props) => {
-  //TODO: Use formik and yup to validate form
-  //TODO: dispatch action for true login result
+  //TODO: Use yup to validate form
+
+  const navigate = useNavigate()
+  const [errorMessage, setErrorMessage] = useState('')
 
   const { handleSubmit, handleChange } = useFormik<SignInValues>({
     initialValues: {
@@ -31,8 +34,13 @@ const Login = (props: Props) => {
       try {
         const response = await login(values.username, values.password)
         props.dispatchLoginSuccessAction(response.username)
-      } catch {
-        console.log('Failed')
+        navigate('/')
+      } catch (error) {
+        if (error.response.status === 401) {
+          setErrorMessage('Unable to log in with provided credentials.')
+        } else if (error.response.status === 500) {
+          setErrorMessage('Oops, something went wrong, please try again.')
+        }
       }
     },
   })
@@ -49,6 +57,9 @@ const Login = (props: Props) => {
           <Form.Item label='Password' name='password'>
             <InputBox type='password' onChange={handleChange} />
           </Form.Item>
+          {errorMessage && (
+            <Alert message={errorMessage} type='error' showIcon={true} style={{ marginBottom: '20px' }} />
+          )}
           <Form.Item>
             <Button type='primary' htmlType='submit' size='middle'>
               Sign in
