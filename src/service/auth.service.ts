@@ -22,22 +22,20 @@ const register = (username: string, email: string, password: string): Promise<Me
   })
 }
 
-const login = async (username: string, password: string): Promise<JwtResponse> => {
+const login = (username: string, password: string): Promise<JwtResponse> => {
   return axios
-    .post(
-      API_URL + 'signin',
-      {
+    .get(API_URL + 'signin', {
+      auth: {
         username,
         password,
       },
-      {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-        },
-      }
-    )
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'content-type': 'application/json',
+      },
+    })
     .then((response) => {
-      response.data.accessToken && localStorage.setItem('user', JSON.stringify(response.data))
+      response.data.token && localStorage.setItem('user', JSON.stringify(response.data))
       return response.data
     })
 }
