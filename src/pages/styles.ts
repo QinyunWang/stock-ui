@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import BackgroundImage from '../../assets/login-page.jpg'
+import BackgroundImage from '../assets/login-page.jpg'
 import { Grid, TextField, Typography } from '@material-ui/core'
 
 export const Title = styled(Typography).attrs(() => ({
