@@ -1,13 +1,22 @@
-import { Col, Input, Row } from 'antd'
 import styled from 'styled-components'
 import BackgroundImage from '../../assets/login-page.jpg'
+import { Grid, TextField, Typography } from '@material-ui/core'
 
-export const ContentContainer = styled(Row)`
+export const Title = styled(Typography).attrs(() => ({
+  variant: 'h3',
+}))`
+  margin-bottom: 32px;
+`
+
+export const ContentContainer = styled(Grid).attrs(() => ({
+  container: true,
+}))`
   height: 100vh;
 `
 
-export const LeftImageSection = styled(Col).attrs(() => ({
-  span: 12,
+export const LeftImageSection = styled(Grid).attrs(() => ({
+  item: true,
+  xs: 6,
 }))`
   background-position: center;
   background-size: cover;
@@ -16,16 +25,18 @@ export const LeftImageSection = styled(Col).attrs(() => ({
   background-image: url(${BackgroundImage});
 `
 
-export const RightLoginSection = styled(Col).attrs(() => ({
-  span: 12,
+export const RightLoginSection = styled(Grid).attrs(() => ({
+  item: true,
+  xs: 6,
 }))`
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 0 100px;
 `
-export const InputBox = styled(Input).attrs(() => ({
-  size: 'large',
+export const InputBox = styled(TextField).attrs(() => ({
+  variant: 'outlined',
+  color: 'primary',
 }))`
   max-width: 400px;
   width: 100%;

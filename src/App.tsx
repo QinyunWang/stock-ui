@@ -1,7 +1,11 @@
 import React, { FC } from 'react'
-import 'antd/dist/antd.css'
 import Router from './routes'
+import { StylesProvider } from '@material-ui/core/styles'
 
-const App: FC = () => <Router />
+const App: FC = () => (
+  <StylesProvider injectFirst={true}>
+    <Router />
+  </StylesProvider>
+)
 
 export default App

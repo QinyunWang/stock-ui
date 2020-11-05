@@ -3,11 +3,12 @@ import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { loginSuccessAction } from '../../actions/auth'
 import { AppState } from '../../types/AppStateContext'
-import { ContentContainer, InputBox, LeftImageSection, RightLoginSection } from './styles'
-import { Alert, Button, Form, Typography } from 'antd'
+import { ContentContainer, InputBox, LeftImageSection, RightLoginSection, Title } from './styles'
 import { useFormik } from 'formik'
 import { login } from '../../service/auth.service'
 import { useNavigate } from 'react-router-dom'
+import { Button, Grid } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 
 interface Props {
   isLoggedIn: boolean
@@ -38,7 +39,7 @@ const Login = (props: Props) => {
       } catch (error) {
         if (error.response.status === 401) {
           setErrorMessage('Unable to log in with provided credentials.')
-        } else if (error.response.status === 500) {
+        } else {
           setErrorMessage('Oops, something went wrong, please try again.')
         }
       }
@@ -49,23 +50,27 @@ const Login = (props: Props) => {
     <ContentContainer>
       <LeftImageSection />
       <RightLoginSection>
-        <Typography.Title level={2}>Welcome to EmpireStock</Typography.Title>
-        <Form layout='vertical' onFinish={handleSubmit}>
-          <Form.Item label='Username' name='username'>
-            <InputBox onChange={handleChange} />
-          </Form.Item>
-          <Form.Item label='Password' name='password'>
-            <InputBox type='password' onChange={handleChange} />
-          </Form.Item>
-          {errorMessage && (
-            <Alert message={errorMessage} type='error' showIcon={true} style={{ marginBottom: '20px' }} />
-          )}
-          <Form.Item>
-            <Button type='primary' htmlType='submit' size='middle'>
-              Sign in
-            </Button>
-          </Form.Item>
-        </Form>
+        <Title>Welcome&nbsp;to EmpireStock</Title>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={3} direction='column'>
+            <Grid item>
+              <InputBox label='Username' name='username' onChange={handleChange} onFocus={() => setErrorMessage('')} />
+            </Grid>
+            <Grid item>
+              <InputBox label='Password' name='password' type='password' onChange={handleChange} />
+            </Grid>
+            {errorMessage && (
+              <Grid item>
+                <Alert severity='error'>{errorMessage}</Alert>
+              </Grid>
+            )}
+            <Grid item>
+              <Button type='submit' variant='contained' color='primary'>
+                Sign In
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
       </RightLoginSection>
     </ContentContainer>
   )
