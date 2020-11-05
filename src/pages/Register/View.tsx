@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { ContentContainer, InputBox, LeftImageSection, RightLoginSection, Title } from '../styles'
 import { Button, Grid } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
@@ -12,7 +12,7 @@ interface RegisterValues {
   password: string
 }
 
-const Register = () => {
+const Register = (): ReactElement => {
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -41,7 +41,7 @@ const Register = () => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3} direction='column'>
             <Grid item>
-              <InputBox label='Email' name='email' onChange={handleChange} />
+              <InputBox label='Email' name='email' type='email' onChange={handleChange} />
             </Grid>
             <Grid item>
               <InputBox label='Username' name='username' onChange={handleChange} />

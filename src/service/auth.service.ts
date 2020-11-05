@@ -15,11 +15,20 @@ interface MessageResponse {
 }
 
 const register = (username: string, email: string, password: string): Promise<MessageResponse> => {
-  return axios.post(API_URL + 'signup', {
-    username,
-    email,
-    password,
-  })
+  return axios.post(
+    API_URL + 'signup',
+    JSON.stringify({
+      username,
+      email,
+      password,
+    }),
+    {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'content-type': 'application/json',
+      },
+    }
+  )
 }
 
 const login = (username: string, password: string): Promise<JwtResponse> => {
