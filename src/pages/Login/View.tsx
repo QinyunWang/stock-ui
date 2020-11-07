@@ -24,7 +24,7 @@ const Login = (props: Props) => {
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('')
 
-  const { handleSubmit, handleChange } = useFormik<SignInValues>({
+  const { handleSubmit, handleChange, isSubmitting } = useFormik<SignInValues>({
     initialValues: {
       username: '',
       password: '',
@@ -63,7 +63,7 @@ const Login = (props: Props) => {
               </Grid>
             )}
             <Grid item>
-              <Button type='submit' variant='contained' color='primary'>
+              <Button type='submit' variant='contained' color='primary' disabled={isSubmitting}>
                 Sign In
               </Button>
             </Grid>

@@ -16,7 +16,7 @@ const Register = (): ReactElement => {
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('')
 
-  const { handleSubmit, handleChange } = useFormik<RegisterValues>({
+  const { handleSubmit, handleChange, isSubmitting } = useFormik<RegisterValues>({
     initialValues: {
       email: '',
       username: '',
@@ -55,7 +55,7 @@ const Register = (): ReactElement => {
               </Grid>
             )}
             <Grid item>
-              <Button type='submit' variant='contained' color='primary'>
+              <Button type='submit' variant='contained' color='primary' disabled={isSubmitting}>
                 Sign Up
               </Button>
             </Grid>
