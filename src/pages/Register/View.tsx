@@ -5,6 +5,16 @@ import { Alert } from '@material-ui/lab'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { register } from '../../service/auth.service'
+import * as Yup from 'yup'
+
+const SignupSchema = Yup.object().shape({
+  email: Yup.string().email().required(),
+  username: Yup.string()
+    .required()
+    .min(6, 'Username must longer than six characters')
+    .max(16, 'Username must shorter than 16 characters'),
+  password: Yup.string().required(),
+})
 
 interface RegisterValues {
   email: string
@@ -16,12 +26,14 @@ const Register = (): ReactElement => {
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('')
 
-  const { handleSubmit, handleChange, isSubmitting } = useFormik<RegisterValues>({
+  const { handleSubmit, handleChange, handleBlur, isSubmitting, touched, errors } = useFormik<RegisterValues>({
     initialValues: {
       email: '',
       username: '',
       password: '',
     },
+    validationSchema: SignupSchema,
+    validateOnBlur: true,
     onSubmit: async (values) => {
       try {
         const { email, username, password } = values
@@ -41,13 +53,36 @@ const Register = (): ReactElement => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3} direction='column'>
             <Grid item>
-              <InputBox label='Email' name='email' type='email' onChange={handleChange} />
+              <InputBox
+                label='Email'
+                name='email'
+                type='email'
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched?.email && !!errors?.email}
+                helperText={touched?.email && errors?.email}
+              />
             </Grid>
             <Grid item>
-              <InputBox label='Username' name='username' onChange={handleChange} />
+              <InputBox
+                label='Username'
+                name='username'
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched?.username && !!errors?.username}
+                helperText={touched?.username && errors?.username}
+              />
             </Grid>
             <Grid item>
-              <InputBox label='Password' name='password' type='password' onChange={handleChange} />
+              <InputBox
+                label='Password'
+                name='password'
+                type='password'
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched?.password && !!errors?.password}
+                helperText={touched?.password && errors?.password}
+              />
             </Grid>
             {errorMessage && (
               <Grid item>

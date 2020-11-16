@@ -8,6 +8,15 @@ import { login } from '../../service/auth.service'
 import { useNavigate } from 'react-router-dom'
 import { Button, Grid } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
+import * as Yup from 'yup'
+
+const SigninSchema = Yup.object().shape({
+  username: Yup.string()
+    .required()
+    .min(6, 'Username must longer than six characters')
+    .max(16, 'Username must shorter than 16 characters'),
+  password: Yup.string().required(),
+})
 
 interface Props {
   dispatchLoginSuccessAction: (username: string) => void
@@ -24,11 +33,13 @@ const Login = (props: Props) => {
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('')
 
-  const { handleSubmit, handleChange, isSubmitting } = useFormik<SignInValues>({
+  const { handleSubmit, handleChange, handleBlur, isSubmitting, errors, touched } = useFormik<SignInValues>({
     initialValues: {
       username: '',
       password: '',
     },
+    validationSchema: SigninSchema,
+    validateOnBlur: true,
     onSubmit: async (values) => {
       try {
         const response = await login(values.username, values.password)
@@ -52,10 +63,26 @@ const Login = (props: Props) => {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3} direction='column'>
             <Grid item>
-              <InputBox label='Username' name='username' onChange={handleChange} onFocus={() => setErrorMessage('')} />
+              <InputBox
+                label='Username'
+                name='username'
+                onChange={handleChange}
+                onBlur={handleBlur}
+                onFocus={() => setErrorMessage('')}
+                error={touched?.username && !!errors?.username}
+                helperText={touched?.username && errors?.username}
+              />
             </Grid>
             <Grid item>
-              <InputBox label='Password' name='password' type='password' onChange={handleChange} />
+              <InputBox
+                label='Password'
+                name='password'
+                type='password'
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched?.password && !!errors?.password}
+                helperText={touched?.password && errors?.password}
+              />
             </Grid>
             {errorMessage && (
               <Grid item>
